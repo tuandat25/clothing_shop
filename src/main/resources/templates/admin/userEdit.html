@@ -1,0 +1,75 @@
+<form id="editUserForm" class="needs-validation" novalidate>
+    <!-- Họ và tên -->
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Họ và tên</label>
+      <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Nhập họ và tên" required>
+      <div class="invalid-feedback">
+        Vui lòng nhập họ và tên.
+      </div>
+    </div>
+    
+    <!-- Số điện thoại -->
+    <div class="mb-3">
+      <label for="phoneNumber" class="form-label">Số điện thoại</label>
+      <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" required>
+      <div class="invalid-feedback">
+        Vui lòng nhập số điện thoại.
+      </div>
+    </div>
+    
+    <!-- Ngày sinh -->
+    <div class="mb-3">
+      <label for="dateOfBirth" class="form-label">Ngày sinh</label>
+      <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth">
+      <div class="invalid-feedback">
+        Vui lòng nhập ngày sinh hợp lệ.
+      </div>
+    </div>
+    
+    <!-- Trạng thái -->
+    <div class="mb-3">
+      <label for="status" class="form-label">Trạng thái</label>
+      <select class="form-select" id="status" name="status" required>
+        <option value="">Chọn trạng thái</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <div class="invalid-feedback">
+        Vui lòng chọn trạng thái.
+      </div>
+    </div>
+    
+    <!-- Địa chỉ -->
+    <div class="mb-3">
+      <label for="address" class="form-label">Địa chỉ</label>
+      <textarea class="form-control" id="address" name="address" rows="3" placeholder="Nhập địa chỉ"></textarea>
+      <div class="invalid-feedback">
+        Vui lòng nhập địa chỉ.
+      </div>
+    </div>
+    
+    <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+  </form>
+  
+  <!-- JavaScript Bootstrap Validation (Optional) -->
+  <script>
+    // Ví dụ code JS để bật bootstrap validation
+    (function () {
+      'use strict';
+      window.addEventListener('load', function () {
+        // Lấy tất cả các form cần kiểm tra
+        var forms = document.getElementsByClassName('needs-validation');
+        // Ngăn chặn submit nếu không hợp lệ
+        Array.prototype.filter.call(forms, function (form) {
+          form.addEventListener('submit', function (event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+  </script>
+  

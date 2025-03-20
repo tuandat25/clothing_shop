@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -26,6 +26,7 @@ public class ProductDTO {
     private String thumbnail;
     private String description;
 
+    private Float discountPrice;
     @JsonProperty("category_id")
-    private Long categoryId;
+    private UUID categoryId;
 }

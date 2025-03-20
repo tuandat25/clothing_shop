@@ -12,7 +12,7 @@ import com.tuandat.clothingshop.responses.OrderDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.Optional;
 
 @Service
@@ -41,13 +41,13 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
-    public OrderDetail getOrderDetail(Long id) {
+    public OrderDetail getOrderDetail(UUID id) {
         return orderDetailRepository.findById(id).orElseThrow(()
         -> new DataNotFoundException("Order detail not found, id: "+ id));
     }
 
     @Override
-    public OrderDetail updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO) {
+    public OrderDetail updateOrderDetail(UUID id, OrderDetailDTO orderDetailDTO) {
         Optional<OrderDetail> optionalOrderDetail = orderDetailRepository.findById(id);
         if (optionalOrderDetail.isPresent()){
             OrderDetail existingOrderDetail = optionalOrderDetail.get();
@@ -74,13 +74,13 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
-    public void deleteOrderDetail(Long id) {
+    public void deleteOrderDetail(UUID id) {
         OrderDetail orderDetail = getOrderDetail(id);
         orderDetailRepository.delete(orderDetail);
     }
 
     @Override
-    public List<OrderDetail> getOrderDetails(Long orderId) {
+    public List<OrderDetail> getOrderDetails(UUID orderId) {
         orderRepository.findById(orderId).orElseThrow(()
         -> new DataNotFoundException("Order not found!, id: "+ orderId));
         return orderDetailRepository.findByOrderId(orderId);

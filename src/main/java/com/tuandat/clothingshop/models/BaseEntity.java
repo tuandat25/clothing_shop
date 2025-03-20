@@ -1,4 +1,5 @@
 package com.tuandat.clothingshop.models;
+import java.util.UUID;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;

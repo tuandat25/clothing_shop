@@ -1,4 +1,5 @@
 package com.tuandat.clothingshop.models;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -31,16 +32,16 @@ import java.util.List;
 @AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Column(name = "fullname", length = 100)
+    @Column(name = "fullname", length = 100, columnDefinition = "NVARCHAR(100)")
     private String fullName;
 
     @Column(name = "phone_number", length = 10, nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(name = "address", length = 200)
+    @Column(name = "address", length = 200, columnDefinition = "NVARCHAR(200)")
     private String address;
 
     @Column(name = "password", length = 200)

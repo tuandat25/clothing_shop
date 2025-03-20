@@ -16,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.Optional;
 
 @Service
@@ -39,14 +39,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(Long productId) {
+    public Product getProductById(UUID productId) {
         return productRepository.findById(productId).orElseThrow(()
                 -> new DataNotFoundException("Cannot find product with id = " + productId));
     }
 
     @Override
     public Page<ProductResponse> getAllProducts(String keyword,
-                                                Long categoryId, PageRequest pageRequest) {
+                                                UUID categoryId, PageRequest pageRequest) {
         // Lấy danh sách sản phẩm theo trang (page), giới hạn (limit), và categoryId (nếu có)
         Page<Product> productsPage;
         productsPage = productRepository.searchProducts(categoryId, keyword, pageRequest);
@@ -54,7 +54,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(long id, ProductDTO dto) {
+    public Product updateProduct(UUID id, ProductDTO dto) {
         Product existingProduct = getProductById(id);
         if (existingProduct != null) {
             Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() ->
@@ -70,7 +70,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteProduct(UUID id) {
         Optional<Product> existingProduct = productRepository.findById(id);
         existingProduct.ifPresent(productRepository::delete);
     }
@@ -82,7 +82,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductImage createProductImage(Product product, ProductImageDTO dto) {
-        long productId = product.getId();
+        UUID productId = product.getId();
         ProductImage productImage = ProductImage.builder().product(product)
                 .image(dto.getImage())
                 .build();
@@ -91,7 +91,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void isValidSize(long productId) {
+    public void isValidSize(UUID productId) {
         int productSize = productImageRepository.findAllByProductId(productId).size();
         if (productSize > ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
             throw new InvalidParamException("Number of images must be <= " + ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
@@ -99,12 +99,17 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> findProductByIds(List<Long> ids) {
+    public List<Product> findProductByIds(List<UUID> ids) {
         for (var id : ids) {
             if (!productRepository.existsById(id)) {
                 throw new DataNotFoundException("Product not found!");
             }
         }
         return productRepository.findProductsByIds(ids);
+    }
+
+    @Override
+    public Long count() {
+        return productRepository.count();
     }
 }

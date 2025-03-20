@@ -9,8 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -18,20 +17,23 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductResponse extends BaseResponse {
-    private long id;
+    private UUID id;
     private String name;
 
     private Float price;
+    private Float discountPrice;
+    private Float discountPercent;
     private String thumbnail;
     private String description;
 
     @JsonProperty("category_id")
-    private Long categoryId;
+    private UUID categoryId;
 
     @JsonProperty("product_images")
     private List<ProductImage> productImages = new ArrayList<>();
 
     public static ProductResponse fromProduct(Product product) {
+        
         ProductResponse productResponse = ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -41,6 +43,7 @@ public class ProductResponse extends BaseResponse {
                 .categoryId(product.getCategory().getId())
                 .productImages(product.getProductImages())
                 .build();
+        productResponse.setDiscountPrice(product.getPrice() - (product.getPrice() * 0.1f));
         productResponse.setCreateAt(product.getCreateAt());
         productResponse.setUpdateAt(product.getUpdateAt());
         return productResponse;

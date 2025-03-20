@@ -1,5 +1,4 @@
 package com.tuandat.clothingshop.models;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "products")
@@ -28,10 +27,10 @@ import java.util.List;
 @Builder
 public class Product extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Column(nullable = false, length = 350)
+    @Column(nullable = false, length = 350, columnDefinition = "NVARCHAR(350)")
     private String name;
 
     @Column(length = 300)
@@ -47,4 +46,7 @@ public class Product extends BaseEntity{
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductImage> productImages;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVariant> variants = new ArrayList<>();
 }

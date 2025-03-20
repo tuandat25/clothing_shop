@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -22,7 +22,7 @@ import java.util.List;
 public class OrderDTO {
     @JsonProperty("user_id")
     @Min(value = 1, message = "User's id must be > 0")
-    private Long userId;
+    private UUID userId;
 
     @JsonProperty("fullname")
     private String fullName;

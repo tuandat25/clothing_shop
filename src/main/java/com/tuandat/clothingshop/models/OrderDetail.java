@@ -1,4 +1,5 @@
 package com.tuandat.clothingshop.models;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
@@ -24,8 +25,8 @@ import lombok.Setter;
 @Builder
 public class OrderDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

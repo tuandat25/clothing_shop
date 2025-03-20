@@ -1,0 +1,66 @@
+<div id="userListContent">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Danh sách người dùng</h1>
+   
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Quyền hạn</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày sinh</th>
+                            <th>Tác vụ</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.fullName}"></td>
+                            <td th:text="${user.phoneNumber}"></td>
+                            <td th:text="${user.roleName}"></td>
+                            <td th:text="${user.status}"></td>
+                            <td th:text="${user.dateOfBirth != null ? #dates.format(user.dateOfBirth, 'dd/MM/yyyy') : 'Không có'}"></td>
+                            <td class="nav-item dropdown no-arrow">
+                                    <a class="nav-link dropdown-toggle d-flex justify-content-center" href="#" id="userDropdown" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa-solid fa-ellipsis text-gray-500"></i>
+                                    </a>
+                                    <!-- Dropdown - User Information -->
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                        aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" th:href="@{/4season/admin/user/edit/{id}(id=${user.id})}" id="editUserLoadAjax">
+                                            Sửa thông tin
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">
+                                            Xóa người dùng
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#" data-toggle="modal">
+                                            Cập nhật trạng thái
+                                        </a>
+
+                                    </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+    <!-- Page level custom scripts -->
+    <script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+
+</div>

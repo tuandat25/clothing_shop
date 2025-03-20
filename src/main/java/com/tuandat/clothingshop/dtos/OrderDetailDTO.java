@@ -1,5 +1,7 @@
 package com.tuandat.clothingshop.dtos;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -18,11 +20,11 @@ import lombok.Setter;
 public class OrderDetailDTO {
     @JsonProperty("order_id")
     @Min(value = 1, message = "Order id must be greater than 0")
-    private Long orderId;
+    private UUID orderId;
 
     @JsonProperty("product_id")
     @Min(value = 1, message = "Product id must be greater than 0")
-    private Long productId;
+    private UUID productId;
 
     @Min(value = 0, message = "Product id must be greater than 0")
     private Float price;

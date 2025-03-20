@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/order_details")
@@ -44,7 +44,7 @@ public class OrderDetailController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getOrderDetail(@PathVariable("id") Long id){
+    public ResponseEntity<?> getOrderDetail(@PathVariable("id") UUID id){
         try{
             OrderDetail orderDetail= orderDetailService.getOrderDetail(id);
             return ResponseEntity.ok().body(OrderDetailResponse.fromOrderDetail(orderDetail));
@@ -54,7 +54,7 @@ public class OrderDetailController {
     }
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<?> getOrderDetails(@PathVariable("orderId") Long id){
+    public ResponseEntity<?> getOrderDetails(@PathVariable("orderId") UUID id){
         try{
             List<OrderDetail> orderDetails = orderDetailService.getOrderDetails(id);
             List<OrderDetailResponse> orderDetailResponses= orderDetails.stream().map(OrderDetailResponse::fromOrderDetail).toList();
@@ -65,7 +65,7 @@ public class OrderDetailController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrderDetail(@Valid @PathVariable("id") Long id,
+    public ResponseEntity<?> updateOrderDetail(@Valid @PathVariable("id") UUID id,
                                                @Valid @RequestBody OrderDetailDTO orderDetailDTO,
                                                BindingResult bindingResult){
         try {
@@ -84,7 +84,7 @@ public class OrderDetailController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrderDetail(@Valid @PathVariable("id") Long id){
+    public ResponseEntity<?> deleteOrderDetail(@Valid @PathVariable("id") UUID id){
         try {
             orderDetailService.deleteOrderDetail(id);
             return ResponseEntity.noContent().build();

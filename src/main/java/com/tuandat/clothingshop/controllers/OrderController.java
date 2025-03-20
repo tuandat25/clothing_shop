@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/orders")
@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping("user/{user_id}")
-    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") Long userId){
+    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") UUID userId){
         try{
             List<OrderResponse> orders = orderService.getAllOrders(userId);
             return ResponseEntity.ok(orders);
@@ -53,7 +53,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@Valid @PathVariable("id") Long orderID){
+    public ResponseEntity<?> getOrder(@Valid @PathVariable("id") UUID orderID){
         try{
             OrderResponse existingOrder = orderService.getOrder(orderID);
             return ResponseEntity.ok(existingOrder);
@@ -63,7 +63,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrders(@PathVariable("id") Long id, @RequestBody @Valid OrderDTO orderDTO){
+    public ResponseEntity<?> updateOrders(@PathVariable("id") UUID id, @RequestBody @Valid OrderDTO orderDTO){
         try{
             OrderResponse orderResponse= orderService.updateOrder(id, orderDTO);
             return ResponseEntity.ok().body(orderResponse);
@@ -73,7 +73,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("id") Long id){
+    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("id") UUID id){
         try{
             orderService.deleteOrder(id);
             return ResponseEntity.ok("Delete order successfully");

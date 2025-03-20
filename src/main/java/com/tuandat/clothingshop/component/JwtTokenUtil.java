@@ -3,6 +3,7 @@ package com.tuandat.clothingshop.component;
 import com.tuandat.clothingshop.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -28,56 +29,53 @@ public class JwtTokenUtil {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public String generateToken(User user){
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-//        need what, add that
+        // need what, add that
         claims.put("phoneNumber", user.getPhoneNumber());
         claims.put("userId", user.getId());
-        try{
+        claims.put("fullName", user.getFullName());
+        try {
             String token = Jwts.builder()
                     .claims(claims)
                     .subject(user.getPhoneNumber())
-                    .expiration(new Date(System.currentTimeMillis() + expiration *1000L))
+                    .expiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
             return token;
-        }catch (Exception e){
-//            You can inject Logger, instead SOUT
-            System.err.println("Cannot create jwt token, error: "+e.getMessage());
+        } catch (Exception e) {
+            // You can inject Logger, instead SOUT
+            System.err.println("Cannot create jwt token, error: " + e.getMessage());
             return null;
         }
     }
 
-    private SecretKey getSignInKey(){
-        byte[] bytes= Decoders.BASE64.decode(secretKey);
+    private SecretKey getSignInKey() {
+        byte[] bytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(bytes);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSignInKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().verifyWith(getSignInKey()).build().parseSignedClaims(token).getPayload();
     }
 
-    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver){
-        final Claims claims= this.extractAllClaims(token);
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = this.extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-//    Check expiration
-    public boolean isTokenExpired(String token){
+    // Check expiration
+    public boolean isTokenExpired(String token) {
         Date expirationDate = this.extractClaims(token, Claims::getExpiration);
         return expirationDate.before(new Date());
     }
 
-    public String extractPhoneNumber(String token){
+    public String extractPhoneNumber(String token) {
         return extractClaims(token, Claims::getSubject);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails){
-        String phoneNumber= extractPhoneNumber(token);
+    public boolean validateToken(String token, UserDetails userDetails) {
+        String phoneNumber = extractPhoneNumber(token);
         return (phoneNumber.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 }

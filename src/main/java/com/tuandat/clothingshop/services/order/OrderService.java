@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +61,7 @@ public class OrderService implements IOrderService{
         for (CartItemDTO cartItemDTO: orderDTO.getCartItems()){
             OrderDetail orderDetail= new OrderDetail();
             orderDetail.setOrder(order);
-            long productId = cartItemDTO.getProductId();
+            UUID productId = cartItemDTO.getProductId();
             long quantity= cartItemDTO.getQuantity();
             Product product = productRepository.findById(productId).orElseThrow(()-> new DataNotFoundException("Product not found"));
             orderDetail.setProduct(product);
@@ -75,14 +75,14 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public OrderResponse getOrder(Long id) {
+    public OrderResponse getOrder(UUID id) {
         Order order= orderRepository.findById(id).orElseThrow(()
         -> new DataNotFoundException("Order not found!"));
         return modelMapper.map(order, OrderResponse.class);
     }
 
     @Override
-    public OrderResponse updateOrder(Long id, OrderDTO dto) {
+    public OrderResponse updateOrder(UUID id, OrderDTO dto) {
         Order orderExisting = orderRepository.findById(id).orElseThrow(()
         -> new DataNotFoundException("Order not found!"));
         User existingUser = userRepository.findById(dto.getUserId()).orElseThrow(
@@ -97,7 +97,7 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public void deleteOrder(Long id) {
+    public void deleteOrder(UUID id) {
         Order orderExisting = orderRepository.findById(id).orElseThrow(()
                 -> new DataNotFoundException("Order not found!"));
         if (orderExisting != null){
@@ -107,12 +107,17 @@ public class OrderService implements IOrderService{
     }
 
     @Override
-    public List<OrderResponse> getAllOrders(Long userId) {
+    public List<OrderResponse> getAllOrders(UUID userId) {
         userRepository.findById(userId).orElseThrow(()-> new DataNotFoundException("User not found!"));
         return orderRepository.findByUserId(userId)
                 .stream()
                 .map((order)->
                         modelMapper.map(order, OrderResponse.class))
                 .toList();
+    }
+
+    @Override
+    public Long count() {
+        return orderRepository.count();
     }
 }

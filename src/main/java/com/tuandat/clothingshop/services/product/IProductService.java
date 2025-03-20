@@ -9,25 +9,27 @@ import com.tuandat.clothingshop.responses.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
+import java.util.*;
 
 public interface IProductService {
     Product createProduct(ProductDTO productDTO) throws Exception;
 
-    Product getProductById(Long id) throws Exception;
+    Product getProductById(UUID id) throws Exception;
 
     Page<ProductResponse> getAllProducts(String keyword,
-                                         Long categoryId, PageRequest pageRequest);
+                                         UUID categoryId, PageRequest pageRequest);
 
-    Product updateProduct(long id, ProductDTO dto);
+    Product updateProduct(UUID id, ProductDTO dto);
 
-    void deleteProduct(long id);
+    void deleteProduct(UUID id);
 
     boolean existByName(String name);
 
     ProductImage createProductImage(Product product, ProductImageDTO dto);
 
-    void isValidSize(long productId);
+    void isValidSize(UUID productId);
 
-    List<Product> findProductByIds(List<Long> ids);
+    List<Product> findProductByIds(List<UUID> ids);
+
+    Long count();
 }

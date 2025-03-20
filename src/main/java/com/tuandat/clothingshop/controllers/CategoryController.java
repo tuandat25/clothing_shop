@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/categories")
@@ -50,7 +50,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable("id") Long id, @RequestBody @Valid CategoryDTO dto,
+    public ResponseEntity<?> updateCategory(@PathVariable("id") UUID id, @RequestBody @Valid CategoryDTO dto,
                                             HttpServletRequest request){
         categoryService.updateCategory(id, dto);
         return ResponseEntity.status(200).body(LoginResponse.builder().message(
@@ -59,7 +59,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") UUID id) throws Exception {
         categoryService.deleteCategory(id);
         return ResponseEntity.status(203).body("This is delete categories " +id);
     }

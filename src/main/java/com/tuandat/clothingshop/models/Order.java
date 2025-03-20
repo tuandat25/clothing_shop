@@ -1,5 +1,4 @@
 package com.tuandat.clothingshop.models;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,8 +20,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "orders")
@@ -33,14 +31,14 @@ import java.util.List;
 @Builder
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "fullname", length = 100)
+    @Column(name = "fullname", length = 100, columnDefinition = "NVARCHAR(100)")
     private String fullName;
 
     @Column(length = 100)
@@ -52,7 +50,7 @@ public class Order {
     @Column(length = 100)
     private String address;
 
-    @Column(length = 100)
+    @Column(length = 200, columnDefinition = "NVARCHAR(200)")
     private String note;
 
     @Column(name = "order_date")
@@ -67,7 +65,7 @@ public class Order {
     @Column(name = "shipping_method")
     private String shippingMethod;
 
-    @Column(name = "shipping addess")
+    @Column(name = "shipping addess", columnDefinition = "NVARCHAR(100)")
     private String shippingAddress;
 
     @Column(name = "shipping_date")

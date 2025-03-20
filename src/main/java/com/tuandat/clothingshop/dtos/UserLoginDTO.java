@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.UUID;
 @Builder
 @Data
 @NoArgsConstructor
@@ -19,6 +19,10 @@ public class UserLoginDTO {
     @NotBlank(message = "Password is required!")
     private String password;
 
+    @JsonProperty("full_name")
+    private String fullName;
+
     @JsonProperty("role_id")
-    private Long roleId;
+    private UUID roleId;
+    
 }

@@ -1,5 +1,7 @@
 package com.tuandat.clothingshop.dtos;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CartItemDTO {
     @JsonProperty("product_id")
-    private long productId;
+    private UUID productId;
 
     @JsonProperty("quantity")
     private long quantity;

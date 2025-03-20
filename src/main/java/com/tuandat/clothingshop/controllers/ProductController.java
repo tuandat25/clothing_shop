@@ -38,9 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -51,25 +49,22 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<?> getAllProducts(
             @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+            @RequestParam(required = false, name = "category_id") UUID categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int limit) {
-        PageRequest pageRequest = PageRequest.of(
-                page,
-                limit,
-                Sort.by("id").ascending());
-        Page<ProductResponse> productPages = productService.getAllProducts(keyword, categoryId,pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, limit, Sort.by("id").ascending());
+        Page<ProductResponse> productPages = productService.getAllProducts(keyword, categoryId, pageRequest);
         int totalPage = productPages.getTotalPages();
         List<ProductResponse> products = productPages.getContent();
         return ResponseEntity.status(200).body(
-                ProductListResponse.builder().
-                        products(products).
-                        totalPages(totalPage).
-                        build());
+                ProductListResponse.builder()
+                        .products(products)
+                        .totalPages(totalPage)
+                        .build());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getProductById(@PathVariable("id") UUID id) {
         try {
             Product existingProduct = productService.getProductById(id);
             return ResponseEntity.status(200).body(ProductResponse.fromProduct(existingProduct));
@@ -80,7 +75,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody @Valid ProductDTO productDTO,
-                                           BindingResult bindingResult) {
+            BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
                 List<String> errorMessage = bindingResult.getFieldErrors()
@@ -94,10 +89,9 @@ public class ProductController {
         }
     }
 
-    @PostMapping(value = "uploads/{productId}",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFile(@PathVariable("productId") long productId,
-                                        @ModelAttribute ArrayList<MultipartFile> files) {
+    @PostMapping(value = "uploads/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFile(@PathVariable("productId") UUID productId,
+            @ModelAttribute ArrayList<MultipartFile> files) {
         try {
             Product existingProduct = productService.getProductById(productId);
             List<ProductImage> productImages = new ArrayList<>();
@@ -170,12 +164,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<?> updateProduct(@PathVariable("id") UUID id) {
         return ResponseEntity.status(203).body("This is update product " + id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") UUID id) {
         try {
             productService.deleteProduct(id);
             return ResponseEntity.status(200).body(String.format("Product with id %d deleted successfully !", id));
@@ -185,39 +179,38 @@ public class ProductController {
     }
 
     @GetMapping("/by-ids")
-    public ResponseEntity<?> findProductsByIds(@RequestParam("ids") List<Long> ids){
-        try{
-            List<Product> product= productService.findProductByIds(ids);
+    public ResponseEntity<?> findProductsByIds(@RequestParam("ids") List<UUID> ids) {
+        try {
+            List<Product> product = productService.findProductByIds(ids);
             return ResponseEntity.ok().body(product);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    //    @PostMapping("/generateFakeProducts")
-    private ResponseEntity<String> generateFakeProduct() {
-        Faker faker = new Faker();
-        for (int i = 0; i < 500_000; i++) {
-            String title = faker.commerce().productName();
-            if (productService.existByName(title)) {
-                continue;
-            }
-            ProductDTO productDTO = ProductDTO
-                    .builder()
-                    .name(title)
-                    .price((float) faker.number().numberBetween(10, 90_000_000))
-                    .description(faker.lorem().sentence())
-                    .thumbnail("")
-                    .categoryId((long) faker.number().numberBetween(1, 6))
-                    .build();
-            try {
-                productService.createProduct(productDTO);
-            } catch (Exception e) {
-                ResponseEntity.badRequest().body(e.getMessage());
-            }
-        }
-        return ResponseEntity.ok(null);
-    }
-
+    // @PostMapping("/generateFakeProducts")
+    // private ResponseEntity<String> generateFakeProduct() {
+    // Faker faker = new Faker();
+    // for (int i = 0; i < 500_000; i++) {
+    // String title = faker.commerce().productName();
+    // if (productService.existByName(title)) {
+    // continue;
+    // }
+    // ProductDTO productDTO = ProductDTO
+    // .builder()
+    // .name(title)
+    // .price((float) faker.number().numberBetween(10, 90_000_000))
+    // .description(faker.lorem().sentence())
+    // .thumbnail("")
+    // .categoryId((UUID) faker.number().numberBetween(1, 6))
+    // .build();
+    // try {
+    // productService.createProduct(productDTO);
+    // } catch (Exception e) {
+    // ResponseEntity.badRequest().body(e.getMessage());
+    // }
+    // }
+    // return ResponseEntity.ok(null);
+    // }
 
 }

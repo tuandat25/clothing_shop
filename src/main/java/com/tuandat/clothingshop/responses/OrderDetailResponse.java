@@ -15,20 +15,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @Builder
 public class OrderDetailResponse {
-    private Long id;
+    private UUID id;
 
     @JsonProperty("order_id")
-    private Long orderId;
+    private UUID orderId;
 
     @JsonProperty("product_id")
-    private Long productId;
+    private UUID productId;
 
     private Float price;
 

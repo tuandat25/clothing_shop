@@ -12,8 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
@@ -38,45 +37,68 @@ public class WebSecurityConfig {
 //                                    String.format("%s/users/details", apiPrefix)
                             )
                             .permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/roles**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/categories/**", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
-                            .requestMatchers(PUT,
-                                    String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
-                            .requestMatchers(DELETE,
-                                    String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
-                            .requestMatchers(GET,
-                                    String.format("%s/products/**", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
-                            .requestMatchers(PUT,
-                                    String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
-                            .requestMatchers(DELETE,
-                                    String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
-                            // Path access photo
-                            .requestMatchers(GET,
-                                    String.format("%s/products/images/**", apiPrefix)).permitAll()
-                            .requestMatchers(POST,
-                                    String.format("%s/orders/**", apiPrefix)).permitAll()
-                            .requestMatchers(GET,
-                                    String.format("%s/orders/**", apiPrefix)).permitAll()
-                            .requestMatchers(PUT,
-                                    String.format("%s/orders/**", apiPrefix)).hasRole("ADMIN")
-                            .requestMatchers(DELETE,
-                                    String.format("%s/orders/**", apiPrefix)).hasRole("ADMIN")
-                            .requestMatchers(POST,
-                                    String.format("%s/order_details/**", apiPrefix)).hasAnyRole("USER")
-                            .requestMatchers(GET,
-                                    String.format("%s/order_details/**", apiPrefix)).hasAnyRole("USER", "ADMIN")
-                            .requestMatchers(PUT,
-                                    String.format("%s/order_details/**", apiPrefix)).hasRole("ADMIN")
-                            .requestMatchers(DELETE,
-                                    String.format("%s/order_details/**", apiPrefix)).hasRole("ADMIN")
-                            .anyRequest().authenticated();
+
+                            // Cho phép truy cập static resources và các trang view FE
+                        .requestMatchers(
+                                "/css/**", 
+                                "/js/**", 
+                                "/img/**",
+                                "/lib/**", 
+                                "/mail/**", 
+                                "/scss/**",
+                                "/vendor/**"
+                        ).permitAll()
+                        .requestMatchers(GET, "/auth/**").permitAll()
+                        .requestMatchers(GET, "/4season/home").permitAll()
+                        .requestMatchers(GET,
+                                String.format("%s/roles**", apiPrefix)).permitAll()
+                        .requestMatchers(GET,
+                                String.format("%s/categories/**", apiPrefix)).permitAll()
+
+                                
+                        .requestMatchers(GET, "/4season/admin/**").hasAuthority("ADMIN")
+
+                        .requestMatchers(POST,
+                                String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
+                        .requestMatchers(PUT,
+                                String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
+                        .requestMatchers(DELETE,
+                                String.format("%s/categories/**", apiPrefix)).hasAnyRole("ADMIN")
+                        .requestMatchers(GET,
+                                String.format("%s/products/**", apiPrefix)).permitAll()
+                        .requestMatchers(POST,
+                                String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
+                        .requestMatchers(PUT,
+                                String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
+                        .requestMatchers(DELETE,
+                                String.format("%s/products/**", apiPrefix)).hasAnyRole("ADMIN")
+                        // Path access photo
+                        .requestMatchers(GET,
+                                String.format("%s/products/images/**", apiPrefix)).permitAll()
+                        .requestMatchers(POST,
+                                String.format("%s/orders/**", apiPrefix)).permitAll()
+                        .requestMatchers(GET,
+                                String.format("%s/orders/**", apiPrefix)).permitAll()
+                        .requestMatchers(PUT,
+                                String.format("%s/orders/**", apiPrefix)).hasRole("ADMIN")
+                        .requestMatchers(DELETE,
+                                String.format("%s/orders/**", apiPrefix)).hasRole("ADMIN")
+                        .requestMatchers(POST,
+                                String.format("%s/order_details/**", apiPrefix)).hasAnyRole("USER")
+                        .requestMatchers(GET,
+                                String.format("%s/order_details/**", apiPrefix)).hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(PUT,
+                                String.format("%s/order_details/**", apiPrefix)).hasRole("ADMIN")
+                        .requestMatchers(DELETE,
+                                String.format("%s/order_details/**", apiPrefix)).hasRole("ADMIN")
+                        .anyRequest().authenticated();
                 })
+                .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/auth/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JWT_TOKEN", "JSESSIONID")
+                )
                 .csrf(AbstractHttpConfigurer::disable);
 
         http.cors(httpSecurityCorsConfigurer -> {

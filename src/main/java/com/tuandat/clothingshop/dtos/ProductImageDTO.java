@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import java.util.UUID;
 @Getter
 @Setter
 @Data
@@ -20,7 +20,7 @@ import lombok.Setter;
 public class ProductImageDTO {
     @JsonProperty("product_id")
     @Min(value = 1, message = "Product's ID must be > 0")
-    private Long productId;
+    private UUID productId;
 
     @Size(min = 5, max= 200, message = "Name must be between 3 and 200 chars")
     @Column(name = "image_url")

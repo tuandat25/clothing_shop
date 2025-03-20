@@ -3,12 +3,14 @@ package com.tuandat.clothingshop.services.category;
 import com.tuandat.clothingshop.dtos.CategoryDTO;
 import com.tuandat.clothingshop.models.Category;
 
-import java.util.List;
+import java.util.*;
 
 public interface ICategoryService {
     Category createCategory(CategoryDTO category);
-    Category getCategoryById(long id);
+    Category getCategoryById(UUID id);
     List<Category> getAllCategories();
-    Category updateCategory(long categoryId, CategoryDTO category);
-    Category deleteCategory(long id) throws Exception;
+    Category updateCategory(UUID categoryId, CategoryDTO category);
+    Category deleteCategory(UUID id) throws Exception;
+    UUID getCategoryIdByName(String name);
+    Long count();
 }

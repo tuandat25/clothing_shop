@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +18,9 @@ import java.util.List;
 @Getter
 @Builder
 public class OrderResponse {
-    private Long id;
+    private UUID id;
     @JsonProperty("user_id")
-    private Long userId;
+    private UUID userId;
     @JsonProperty("fullname")
     private String fullName;
 

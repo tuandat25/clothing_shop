@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.util.UUID;
 import java.util.Date;
 
 @Data
@@ -15,6 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+
+    private UUID id;
     @JsonProperty("fullname")
     private String fullName;
 
@@ -39,6 +41,10 @@ public class UserDTO {
     private String googleAccountId;
 
     @JsonProperty("role_id")
-    @NotNull(message = "Role id is required!")
-    private Long roleId;
+    // @NotNull(message = "Role id is required!")
+    private UUID roleId;
+
+    private String roleName;
+
+    private String status;
 }

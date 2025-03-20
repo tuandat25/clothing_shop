@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng ký</title>
+  <!-- Sử dụng CDN của Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Hiệu ứng chuyển tiếp mượt */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-cover bg-center"
+  style="background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2xvdGhpbmd8ZW58MHx8MHx8fDA%3D');">
+  <!-- Container: sử dụng flex để căn giữa theo trục dọc và đặt ở bên phải -->
+  <div class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-8 bg-white bg-opacity-80 rounded-lg shadow-lg mr-8 fade-in">
+      <!-- Tab chuyển đổi Login/ Register -->
+      <div class="flex justify-center mb-6">
+        <button id="registerTab"
+          class="px-4 py-2 text-xl font-semibold text-gray-500 border-b-2 border-transparent focus:outline-none">
+          Đăng ký
+        </button>
+      </div>
+      
+      <!-- Thông báo thành công (ẩn ban đầu) -->
+      <div id="successMessage" class="text-green-500 text-center mb-4 hidden"></div>
+      <!-- Thông báo lỗi chung (nếu cần) -->
+      <div id="generalError" class="text-red-500 text-center mb-4 hidden"></div>
+
+      <!-- Form Register: Sử dụng AJAX nên không submit theo truyền thống -->
+      <div id="registerForm" class="fade-in">
+        <form id="registerAjaxForm">
+          <div class="mb-4">
+            <label for="registerName" class="block text-gray-700">Họ và tên</label>
+            <input type="text" id="registerName" name="fullname"
+              class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Nhập họ và tên của bạn" required>
+            <span class="text-red-500 text-sm" id="error-fullname"></span>
+          </div>
+          <div class="mb-4">
+            <label for="registerPhone" class="block text-gray-700">Số điện thoại</label>
+            <input type="text" id="registerPhone" name="phone_number"
+              class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Nhập số điện thoại của bạn" required>
+            <span class="text-red-500 text-sm" id="error-phone_number"></span>
+          </div>
+          <!-- <div class="mb-4">
+            <label for="registerEmail" class="block text-gray-700">Email</label>
+            <input type="email" id="registerEmail" name="email"
+              class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Nhập email của bạn" required>
+            <span class="text-red-500 text-sm" id="error-email"></span>
+          </div> -->
+          <div class="mb-4">
+            <label for="registerPassword" class="block text-gray-700">Mật khẩu</label>
+            <input type="password" id="registerPassword" name="password"
+              class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Tạo mật khẩu" required>
+            <span class="text-red-500 text-sm" id="error-password"></span>
+          </div>
+          <div class="mb-4">
+            <label for="registerRetypePassword" class="block text-gray-700">Nhập lại mật khẩu</label>
+            <input type="password" id="registerRetypePassword" name="retype_password"
+              class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Nhập lại mật khẩu" required>
+            <span class="text-red-500 text-sm" id="error-retype_password"></span>
+          </div>
+
+          <div class="mb-4">
+            <button type="submit"
+              class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">Đăng ký</button>
+          </div>
+          <div class="mb-4 text-center">
+            <span class="text-gray-500">hoặc</span>
+          </div>
+          <div class="flex justify-between space-x-4 mb-4">
+            <button type="button"
+              class="flex w-full bg-white justify-center items-center text-black py-2 rounded-lg hover:bg-red-600 transition-colors">
+              <img class="me-2" src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-1024.png"
+                alt="" style="width: 24px; height: 24px;">
+              <span class="font-normal">Google</span>
+            </button>
+            <button type="button"
+              class="flex w-full bg-white justify-center items-center text-black py-2 rounded-lg hover:bg-red-600 transition-colors">
+              <img class="me-2"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/240px-Facebook_Logo_%282019%29.png"
+                alt="" style="width: 20px; height: 20px;">
+              <span class="font-normal">Facebook</span>
+            </button>
+          </div>
+          <div class="mb-4 flex items-center pt-4">
+                <span>Bạn đã có tài khoản?</span>
+                <a th:href="@{/auth/login}" style="color: blue;" class="ml-1">Đăng nhập tại đây</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Lắng nghe sự kiện submit của form sử dụng AJAX
+    document.getElementById("registerAjaxForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      
+      // Xóa các thông báo lỗi cũ
+      document.getElementById("error-fullname").innerText = "";
+      document.getElementById("error-phone_number").innerText = "";
+    //   document.getElementById("error-email").innerText = "";
+      document.getElementById("error-password").innerText = "";
+      document.getElementById("error-retype_password").innerText = "";
+      document.getElementById("generalError").innerText = "";
+      document.getElementById("generalError").classList.add("hidden");
+
+      // Lấy dữ liệu từ form
+      const data = {
+        fullname: document.getElementById("registerName").value,
+        phone_number: document.getElementById("registerPhone").value,
+        // email: document.getElementById("registerEmail").value,
+        password: document.getElementById("registerPassword").value,
+        retype_password: document.getElementById("registerRetypePassword").value
+      };
+
+      // Gọi API đăng ký (đảm bảo endpoint API /register đã được cấu hình cho POST JSON)
+      fetch("/api/v1/users/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(errData => { throw errData; });
+        }
+        return response.json();
+      })
+      .then(result => {
+        // Nếu đăng ký thành công, hiển thị thông báo thành công
+        const successMessage = document.getElementById("successMessage");
+        successMessage.innerText = "Đăng ký thành công! Đang chuyển hướng...";
+        successMessage.classList.remove("hidden");
+        // Sau 2 giây chuyển hướng sang view đăng nhập
+        setTimeout(() => {
+          window.location.href = "/auth/login";
+        }, 2000);
+      })
+      .catch(errors => {
+        // Nếu có lỗi, hiển thị lỗi dưới các input tương ứng.
+        // Giả sử errors là một đối tượng có key tương ứng với tên field (vd: fullname, phone_number, email, password, retype_password)
+        // Nếu errors không theo định dạng đó, hiển thị thông báo chung.
+        if (typeof errors === "object") {
+          for (const key in errors) {
+            const errorElement = document.getElementById("error-" + key);
+            if (errorElement) {
+              errorElement.innerText = errors[key];
+            }
+          }
+        } else {
+          // Hiển thị lỗi chung
+          const generalError = document.getElementById("generalError");
+          generalError.innerText = errors;
+          generalError.classList.remove("hidden");
+        }
+      });
+    });
+  </script>
+</body>
+
+
+</html>

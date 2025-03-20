@@ -4,8 +4,8 @@ import com.tuandat.clothingshop.models.Product;
 import com.tuandat.clothingshop.models.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.*;
 
-public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
-    List<ProductImage> findAllByProductId(Long id);
+public interface ProductImageRepository extends JpaRepository<ProductImage, UUID> {
+    List<ProductImage> findAllByProductId(UUID id);
 }

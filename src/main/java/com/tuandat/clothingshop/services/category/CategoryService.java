@@ -6,7 +6,7 @@ import com.tuandat.clothingshop.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
-    public Category getCategoryById(long id) {
+    public Category getCategoryById(UUID id) {
         return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
     }
 
@@ -30,15 +30,25 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
-    public Category updateCategory(long categoryId, CategoryDTO category) {
+    public Category updateCategory(UUID categoryId, CategoryDTO category) {
         Category existingCategory= getCategoryById(categoryId);
         existingCategory.setName(category.getName());
         return categoryRepository.save(existingCategory);
     }
 
     @Override
-    public Category deleteCategory(long id) throws Exception {
+    public Category deleteCategory(UUID id) throws Exception {
         categoryRepository.deleteById(id);
         return null;
+    }
+
+    @Override
+    public Long count() {
+        return categoryRepository.count();
+    }
+
+    @Override
+    public UUID getCategoryIdByName(String name) {
+        return categoryRepository.findIdByName(name);
     }
 }

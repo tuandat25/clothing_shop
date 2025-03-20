@@ -1,4 +1,5 @@
 package com.tuandat.clothingshop.models;
+import java.util.UUID;
 
 public class OrderStatus {
     public static final String PENDING = "pending";
